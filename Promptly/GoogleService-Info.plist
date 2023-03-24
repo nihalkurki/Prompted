@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>38670788264-mb9v1roi86ok7nrc3r81aorip9031hm7.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.38670788264-mb9v1roi86ok7nrc3r81aorip9031hm7</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCfHOXR8Q8ZOBeFHTcv07vvCGVpuI6S3dU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>38670788264</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>nkurki.Promptly</string>
+	<key>PROJECT_ID</key>
+	<string>promptlyswift</string>
+	<key>STORAGE_BUCKET</key>
+	<string>promptlyswift.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:38670788264:ios:b1e599db5d2f188b5cc49d</string>
+</dict>
+</plist>
