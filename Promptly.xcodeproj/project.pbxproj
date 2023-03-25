@@ -16,6 +16,7 @@
 		32D8AA5E29CBAFEF00910710 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 32D8AA5D29CBAFEF00910710 /* GoogleService-Info.plist */; };
 		32D8AA6029CBB3BF00910710 /* SignUpScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D8AA5F29CBB3BF00910710 /* SignUpScreen.swift */; };
 		32D8AA6429CF7EF700910710 /* RespondScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D8AA6329CF7EF700910710 /* RespondScreen.swift */; };
+		32D8AA6629CF8CD500910710 /* ViewReponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D8AA6529CF8CD500910710 /* ViewReponses.swift */; };
 		9F9BF2695AB65A68BF4BCE25 /* Pods_Promptly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3EB008367C72B305544B86 /* Pods_Promptly.framework */; };
 /* End PBXBuildFile section */
 
@@ -34,6 +35,7 @@
 		32D8AA5D29CBAFEF00910710 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		32D8AA5F29CBB3BF00910710 /* SignUpScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpScreen.swift; sourceTree = "<group>"; };
 		32D8AA6329CF7EF700910710 /* RespondScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespondScreen.swift; sourceTree = "<group>"; };
+		32D8AA6529CF8CD500910710 /* ViewReponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewReponses.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +81,7 @@
 				32D8AA5D29CBAFEF00910710 /* GoogleService-Info.plist */,
 				32D8AA5F29CBB3BF00910710 /* SignUpScreen.swift */,
 				32D8AA6329CF7EF700910710 /* RespondScreen.swift */,
+				32D8AA6529CF8CD500910710 /* ViewReponses.swift */,
 			);
 			path = Promptly;
 			sourceTree = "<group>";
@@ -219,6 +222,7 @@
 				32D8AA4E29CBA99100910710 /* ViewController.swift in Sources */,
 				32D8AA4A29CBA99100910710 /* AppDelegate.swift in Sources */,
 				32D8AA4C29CBA99100910710 /* SceneDelegate.swift in Sources */,
+				32D8AA6629CF8CD500910710 /* ViewReponses.swift in Sources */,
 				32D8AA6029CBB3BF00910710 /* SignUpScreen.swift in Sources */,
 				32D8AA6429CF7EF700910710 /* RespondScreen.swift in Sources */,
 			);

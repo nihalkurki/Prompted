@@ -44,9 +44,25 @@ class RedViewController: UIViewController {
         button.center = CGPoint(x: view.center.x, y: view.center.y + 100)
         button.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
         view.addSubview(button)
+        
+        // Add a button to the view
+        let post = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
+        post.setTitle("Post", for: .normal)
+        post.setTitleColor(.white, for: .normal)
+        post.backgroundColor = .black
+        post.center = CGPoint(x: view.center.x, y: view.center.y + 200)
+        post.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
+        view.addSubview(post)
     }
     
     @objc func dismissButtonTapped() {
         dismiss(animated: true, completion: nil)
+    }
+    
+    @objc func postButtonTapped() {
+        let viewScreen = ViewResponsesScreen()
+        viewScreen.modalPresentationStyle = .fullScreen
+        viewScreen.modalTransitionStyle = .crossDissolve
+        self.present(viewScreen, animated: true, completion: nil)
     }
 }
