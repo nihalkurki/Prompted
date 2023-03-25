@@ -111,6 +111,7 @@ class SignUpViewController: UIViewController {
             
             let redVC = RedViewController()
             redVC.modalPresentationStyle = .fullScreen
+            redVC.modalTransitionStyle = .crossDissolve
             self.present(redVC, animated: true, completion: nil)
             //self.navigationController?.pushViewController(redVC, animated: true)
             
