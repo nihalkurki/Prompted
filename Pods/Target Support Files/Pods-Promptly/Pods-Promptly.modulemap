@@ -1,0 +1,6 @@
+framework module Pods_Promptly {
+  umbrella header "Pods-Promptly-umbrella.h"
+
+  export *
+  module * { export * }
+}
