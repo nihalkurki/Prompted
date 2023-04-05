@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		32B6A52E29D78A8200ADDADC /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B6A52D29D78A8200ADDADC /* Post.swift */; };
+		32B6A53029D78BC200ADDADC /* DataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32B6A52F29D78BC200ADDADC /* DataManager.swift */; };
 		32D8AA4A29CBA99100910710 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D8AA4929CBA99100910710 /* AppDelegate.swift */; };
 		32D8AA4C29CBA99100910710 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D8AA4B29CBA99100910710 /* SceneDelegate.swift */; };
 		32D8AA4E29CBA99100910710 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D8AA4D29CBA99100910710 /* ViewController.swift */; };
@@ -16,7 +18,6 @@
 		32D8AA5E29CBAFEF00910710 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 32D8AA5D29CBAFEF00910710 /* GoogleService-Info.plist */; };
 		32D8AA6029CBB3BF00910710 /* SignUpScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D8AA5F29CBB3BF00910710 /* SignUpScreen.swift */; };
 		32D8AA6429CF7EF700910710 /* RespondScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D8AA6329CF7EF700910710 /* RespondScreen.swift */; };
-		32D8AA6629CF8CD500910710 /* ViewReponses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32D8AA6529CF8CD500910710 /* ViewReponses.swift */; };
 		9F9BF2695AB65A68BF4BCE25 /* Pods_Promptly.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 0D3EB008367C72B305544B86 /* Pods_Promptly.framework */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,8 @@
 		0D3EB008367C72B305544B86 /* Pods_Promptly.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Promptly.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		28ECF4668D5B8C48E034272C /* Pods-Promptly.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Promptly.debug.xcconfig"; path = "Target Support Files/Pods-Promptly/Pods-Promptly.debug.xcconfig"; sourceTree = "<group>"; };
 		2D48B9248CEBB6ED67563912 /* Pods-Promptly.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Promptly.release.xcconfig"; path = "Target Support Files/Pods-Promptly/Pods-Promptly.release.xcconfig"; sourceTree = "<group>"; };
+		32B6A52D29D78A8200ADDADC /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
+		32B6A52F29D78BC200ADDADC /* DataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataManager.swift; sourceTree = "<group>"; };
 		32D8AA4629CBA99100910710 /* Promptly.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Promptly.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		32D8AA4929CBA99100910710 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		32D8AA4B29CBA99100910710 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -35,7 +38,6 @@
 		32D8AA5D29CBAFEF00910710 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		32D8AA5F29CBB3BF00910710 /* SignUpScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpScreen.swift; sourceTree = "<group>"; };
 		32D8AA6329CF7EF700910710 /* RespondScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RespondScreen.swift; sourceTree = "<group>"; };
-		32D8AA6529CF8CD500910710 /* ViewReponses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewReponses.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,7 +83,8 @@
 				32D8AA5D29CBAFEF00910710 /* GoogleService-Info.plist */,
 				32D8AA5F29CBB3BF00910710 /* SignUpScreen.swift */,
 				32D8AA6329CF7EF700910710 /* RespondScreen.swift */,
-				32D8AA6529CF8CD500910710 /* ViewReponses.swift */,
+				32B6A52D29D78A8200ADDADC /* Post.swift */,
+				32B6A52F29D78BC200ADDADC /* DataManager.swift */,
 			);
 			path = Promptly;
 			sourceTree = "<group>";
@@ -220,10 +223,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				32D8AA4E29CBA99100910710 /* ViewController.swift in Sources */,
+				32B6A53029D78BC200ADDADC /* DataManager.swift in Sources */,
 				32D8AA4A29CBA99100910710 /* AppDelegate.swift in Sources */,
 				32D8AA4C29CBA99100910710 /* SceneDelegate.swift in Sources */,
-				32D8AA6629CF8CD500910710 /* ViewReponses.swift in Sources */,
 				32D8AA6029CBB3BF00910710 /* SignUpScreen.swift in Sources */,
+				32B6A52E29D78A8200ADDADC /* Post.swift in Sources */,
 				32D8AA6429CF7EF700910710 /* RespondScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

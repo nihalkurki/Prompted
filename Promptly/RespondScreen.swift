@@ -60,9 +60,20 @@ class RedViewController: UIViewController {
     }
     
     @objc func postButtonTapped() {
-        let viewScreen = ViewResponsesScreen()
+//        let viewScreen = ViewResponsesScreen()
+//        viewScreen.modalPresentationStyle = .fullScreen
+//        viewScreen.modalTransitionStyle = .crossDissolve
+//        self.present(viewScreen, animated: true, completion: nil)
+        
+//        let viewScreen = PostListViewController()
+//        viewScreen.modalPresentationStyle = .fullScreen
+//        viewScreen.modalTransitionStyle = .crossDissolve
+//        self.present(viewScreen, animated: true, completion: nil)
+        
+        let viewScreen = MyNewViewController()
         viewScreen.modalPresentationStyle = .fullScreen
         viewScreen.modalTransitionStyle = .crossDissolve
         self.present(viewScreen, animated: true, completion: nil)
+
     }
 }

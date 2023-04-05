@@ -71,7 +71,7 @@ class ViewController: UIViewController {
         
         // Set background color
         view.backgroundColor = UIColor(red: 246/255, green: 247/255, blue: 254/255, alpha: 1.0)
-        
+         
         // Create a button
         let signUpButton = UIButton()
         signUpButton.setTitle("Sign Up", for: .normal)
