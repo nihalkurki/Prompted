@@ -207,9 +207,16 @@ class RedViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
+        if userResponse.isEmpty {
+            print("No user response found.")
+            return
+        }
+        
         db.collection("Post").addDocument(data: [
                 "text": userResponse,
-                "timestamp": FieldValue.serverTimestamp()
+                "timestamp": FieldValue.serverTimestamp(),
+                "like_count": 1,
+                "id": 21
             ]) { error in
                 if let error = error {
                     print("Error adding document: \(error)")

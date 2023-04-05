@@ -1,30 +1,49 @@
-//
-//  ViewController.swift
-//  Promptly
-//
-//  Created by Nihal Kurki on 3/22/23.
-//
+
 
 import UIKit
 import FirebaseAuth
+import SwiftUI
 
 class ViewController: UIViewController {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "PromptlyLogo")
+        imageView.image = UIImage(named: "PromptlyLogo2")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
+    private let backgroundImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(named: "People")
+        imageView.contentMode = .scaleAspectFit
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.alpha = 0.5
+        return imageView
+    }()
+    
     private let prompt: UILabel = {
         let label = UILabel()
-        label.text = "Prompted!"
+        label.text = "Today's Prompt!"
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
+        label.font = UIFont(name: "Helvetica Bold", size: 24)
         return label
+    }()
+    
+    private let prompt2: UILabel = {
+        let label2 = UILabel()
+        label2.text = "What is a boring fact about you?"
+        label2.font = UIFont.systemFont(ofSize: 18, weight: .regular)
+        label2.font = UIFont(name: "Helvetica", size: 18)
+        label2.textAlignment = .center
+        label2.textColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
+        label2.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
+        label2.translatesAutoresizingMaskIntoConstraints = false
+        return label2
     }()
     
     private let SignUpButton: UIButton = {
@@ -64,42 +83,53 @@ class ViewController: UIViewController {
         
         
         
+        
+        
         super.viewDidLoad()
         view.addSubview(SignUpButton)
         view.addSubview(RespondButton)
         view.addSubview(LogOutButton)
         
         // Set background color
-        view.backgroundColor = UIColor(red: 246/255, green: 247/255, blue: 254/255, alpha: 1.0)
-         
+        view.backgroundColor = UIColor(red: 235/255, green: 220/255, blue: 255/255, alpha: 1.0)
+        
+        
         // Create a button
         let signUpButton = UIButton()
         signUpButton.setTitle("Sign Up", for: .normal)
         signUpButton.setTitleColor(.white, for: .normal)
-        signUpButton.backgroundColor = .blue
+        signUpButton.backgroundColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
         signUpButton.translatesAutoresizingMaskIntoConstraints = false
+        signUpButton.clipsToBounds = true
+//        signUpButton.titleLabel?.font = UIFont.init(name: "Damascus", size: 18)
+        signUpButton.layer.cornerRadius = 5
         view.addSubview(signUpButton)
         
         let respondButton = UIButton()
         respondButton.setTitle("Respond", for: .normal)
         respondButton.setTitleColor(.white, for: .normal)
-        respondButton.backgroundColor = .blue
+        respondButton.backgroundColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
         respondButton.translatesAutoresizingMaskIntoConstraints = false
+        respondButton.clipsToBounds = true
+        respondButton.layer.cornerRadius = 5
         view.addSubview(respondButton)
         
-        respondButton.isHidden = true
+        respondButton.isHidden = false
         
         let signOutButton = UIButton()
         signOutButton.setTitle("Sign Out", for: .normal)
         signOutButton.setTitleColor(.white, for: .normal)
-        signOutButton.backgroundColor = .blue
+        signOutButton.backgroundColor = UIColor(red: 120/255, green: 67/255, blue: 230/255, alpha: 1.0)
         signOutButton.translatesAutoresizingMaskIntoConstraints = false
+        signOutButton.clipsToBounds = true
         view.addSubview(signOutButton)
         
-        signOutButton.isHidden = false
+        signOutButton.isHidden = true
         
         view.addSubview(imageView)
+        view.addSubview(backgroundImage)
         view.addSubview(prompt)
+        view.addSubview(prompt2)
                 
         // Add constraints to the button
         NSLayoutConstraint.activate([
@@ -119,14 +149,24 @@ class ViewController: UIViewController {
             signOutButton.heightAnchor.constraint(equalToConstant: 50),
             
             imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -250),
+            imageView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -300),
             imageView.widthAnchor.constraint(equalToConstant: 200),
             imageView.heightAnchor.constraint(equalToConstant: 200),
+            
+            backgroundImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            backgroundImage.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: 275),
+            backgroundImage.widthAnchor.constraint(equalToConstant: 300),
+            backgroundImage.heightAnchor.constraint(equalToConstant: 300),
 
-            prompt.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20),
-            prompt.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
-            prompt.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
-            prompt.heightAnchor.constraint(equalToConstant: 30)
+            prompt.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 0),
+            prompt.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            prompt.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            prompt.heightAnchor.constraint(equalToConstant: 30),
+            
+            prompt2.topAnchor.constraint(equalTo: prompt.bottomAnchor, constant: 20),
+            prompt2.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 40),
+            prompt2.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+            prompt2.heightAnchor.constraint(equalToConstant: 30)
         ])
         
         // Add an action to the button
@@ -182,4 +222,6 @@ class ViewController: UIViewController {
 
 
 }
+
+
 

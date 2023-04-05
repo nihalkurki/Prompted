@@ -40,9 +40,10 @@ class DataManager: ObservableObject {
                     
                     let id = data["id"] as? String ?? ""
                     let text = data["text"] as? String ?? ""
+                    let likes = data["like_count"] as? Int32 ?? 0
                     let timestamp = data["timestamp"] as? Timestamp ?? defaultTimestamp
                     
-                    let post = Post(id: id, text: text, timestamp: timestamp)
+                    let post = Post(id: id, text: text, timestamp: timestamp, like_count: likes)
                     self.posts.append(post)
                 }
             }
@@ -104,9 +105,6 @@ class MyNewViewController: UIViewController {
         for post in posts {
             
             
-            
-
-            
             let input = formattedDateString(from: post.timestamp)
             let dateFormatter = DateFormatter()
             //dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
@@ -156,6 +154,13 @@ class MyNewViewController: UIViewController {
             likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
             likeButton.tintColor = .gray
             whiteBox.addSubview(likeButton)
+            
+            // Add the like count label
+            let likeCountLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 39, y: 60, width: 40, height: 20))
+            likeCountLabel.text = "\(post.like_count)"
+            likeCountLabel.font = UIFont.systemFont(ofSize: 14)
+            likeCountLabel.textColor = .gray
+            whiteBox.addSubview(likeCountLabel)
 
             yOffset += 120
             
