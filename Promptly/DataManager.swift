@@ -48,6 +48,9 @@ class DataManager: ObservableObject {
                     let post = Post(id: id, text: text, timestamp: timestamp, like_count: likes)
                     self.posts.append(post)
                 }
+                
+                self.posts.sort(by: { $0.timestamp.dateValue() > $1.timestamp.dateValue() })
+
             }
         }
     }
@@ -113,10 +116,32 @@ class MyNewViewController: UIViewController {
         for post in posts {
             
             
-            let input = formattedDateString(from: post.timestamp)
+//            let input = formattedDateString(from: post.timestamp)
+//            print(input)
+//            let dateFormatter = DateFormatter()
+//            //dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+//            dateFormatter.dateFormat = "MMM d, yyyy"
+            
             let dateFormatter = DateFormatter()
-            //dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            dateFormatter.dateFormat = "MMM d, yyyy"
+            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+            
+            let date = post.timestamp.dateValue()
+            let input = dateFormatter.string(from: date)
+            
+            let dateFormatter2 = DateFormatter()
+            
+            dateFormatter2.dateFormat = "h:mm a"
+            
+            let formattedDate = post.timestamp.dateValue()
+            let output = dateFormatter2.string(from: date)
+            print(output)
+            
+//            dateFormatter.dateFormat = "h:mm a"
+//
+//            let formattedDate = post.timestamp.dateValue()
+//            let output = dateFormatter.string(from: formattedDate)
+//            print(output)
+            
             let postDate = dateFormatter.date(from: input)
             guard let date = postDate else { continue }
 
@@ -149,22 +174,32 @@ class MyNewViewController: UIViewController {
             postText.numberOfLines = 0
             postText.font = UIFont.systemFont(ofSize: 18)
             whiteBox.addSubview(postText)
+            
+            
+            
+            // Add the user email
+            let userEmailLabel = UILabel(frame: CGRect(x: 100, y: 70, width: whiteBox.frame.width - 150, height: 20))
+            userEmailLabel.text = Auth.auth().currentUser?.email
+            userEmailLabel.font = UIFont.systemFont(ofSize: 14)
+            userEmailLabel.textColor = .gray
+            whiteBox.addSubview(userEmailLabel)
 
             // Add the timestamp
-            let timestampLabel = UILabel(frame: CGRect(x: 100, y: 70, width: whiteBox.frame.width - 150, height: 20))
-            timestampLabel.text = DateFormatter.localizedString(from: date, dateStyle: .medium, timeStyle: .short)
+//            let timestampLabel = UILabel(frame: CGRect(x: 240, y: 70, width: whiteBox.frame.width - 10, height: 20))
+            let timestampLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 70, y: 70, width: whiteBox.frame.width - 10, height: 20))
+            timestampLabel.text = output
             timestampLabel.font = UIFont.systemFont(ofSize: 14)
             timestampLabel.textColor = .gray
             whiteBox.addSubview(timestampLabel)
 
             // Add the like button
-            let likeButton = UIButton(frame: CGRect(x: whiteBox.frame.width - 50, y: 30, width: 30, height: 30))
+            let likeButton = UIButton(frame: CGRect(x: whiteBox.frame.width - 70, y: 30, width: 30, height: 30))
             likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
             likeButton.tintColor = .gray
             whiteBox.addSubview(likeButton)
             
             // Add the like count label
-            let likeCountLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 39, y: 60, width: 40, height: 20))
+            let likeCountLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 40, y: 30, width: 40, height: 30))
             likeCountLabel.text = "\(post.like_count)"
             likeCountLabel.font = UIFont.systemFont(ofSize: 14)
             likeCountLabel.textColor = .gray
@@ -175,9 +210,6 @@ class MyNewViewController: UIViewController {
             // Add target action to the like button
             likeButton.addTarget(self, action: #selector(likeButtonTapped(sender:)), for: .touchUpInside)
 
-            
-            
-            
 
             yOffset += 120
             
@@ -185,9 +217,6 @@ class MyNewViewController: UIViewController {
         }
         
         scrollView.contentSize = CGSize(width: view.frame.width, height: yOffset + 200)
-        
-        print("Content size: \(scrollView.contentSize)")
-        print("Frame size: \(scrollView.frame.size)")
 
     }
     
