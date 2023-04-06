@@ -86,7 +86,7 @@ class MyNewViewController: UIViewController {
         view.subviews.forEach { $0.removeFromSuperview() }
         
         
-        var yOffset: CGFloat = 200
+        var yOffset: CGFloat = 10
 
         // Add the logo image
         let logoImageView = UIImageView(image: UIImage(named: "PromptlyLogo"))
@@ -103,6 +103,12 @@ class MyNewViewController: UIViewController {
         
 
         //var yOffset: CGFloat = 250
+        
+//        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 200, width: view.frame.width, height: view.frame.height - 200))
+        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 180, width: view.frame.width, height: view.frame.height))
+        scrollView.backgroundColor = UIColor(red: 235/255, green: 220/255, blue: 255/255, alpha: 1.0)
+        scrollView.isScrollEnabled = true
+        view.addSubview(scrollView)
 
         for post in posts {
             
@@ -128,7 +134,7 @@ class MyNewViewController: UIViewController {
             whiteBox.layer.shadowOpacity = 0.1
             whiteBox.layer.shadowOffset = CGSize(width: 0, height: 1)
             whiteBox.layer.shadowRadius = 5
-            view.addSubview(whiteBox)
+            scrollView.addSubview(whiteBox)
 
             // Add the profile picture
             let profilePic = UIImageView(frame: CGRect(x: 10, y: 10, width: 80, height: 80))
@@ -177,6 +183,12 @@ class MyNewViewController: UIViewController {
             
 
         }
+        
+        scrollView.contentSize = CGSize(width: view.frame.width, height: yOffset + 200)
+        
+        print("Content size: \(scrollView.contentSize)")
+        print("Frame size: \(scrollView.frame.size)")
+
     }
     
     @objc func likeButtonTapped(sender: UIButton) {
