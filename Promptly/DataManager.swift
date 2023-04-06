@@ -26,11 +26,13 @@ class DataManager: ObservableObject {
         let db = Firestore.firestore()
         let ref = db.collection("Post")
         
-        ref.getDocuments { snapshot, error in
+        ref.addSnapshotListener { snapshot, error in
             guard error == nil else{
                 print(error!.localizedDescription)
                 return
             }
+            
+            self.posts.removeAll()
             
             if let snapshot = snapshot {
                 for document in snapshot.documents {
@@ -161,10 +163,39 @@ class MyNewViewController: UIViewController {
             likeCountLabel.font = UIFont.systemFont(ofSize: 14)
             likeCountLabel.textColor = .gray
             whiteBox.addSubview(likeCountLabel)
+            
+            
+            
+            // Add target action to the like button
+            likeButton.addTarget(self, action: #selector(likeButtonTapped(sender:)), for: .touchUpInside)
+
+            
+            
+            
 
             yOffset += 120
             
 
+        }
+    }
+    
+    @objc func likeButtonTapped(sender: UIButton) {
+        // Increase like count and update label
+        print("is button working")
+
+        if let index = posts.firstIndex(where: { String($0.id) == String(sender.tag) }) {
+            
+            print("is first if working")
+            posts[index].like_count += 1
+            if let likeCountLabel = sender.superview?.subviews.compactMap({ $0 as? UILabel }).first {
+                
+                print("is second if working")
+                likeCountLabel.text = "\(posts[index].like_count)"
+            }
+            
+            // Fill up heart icon red
+            sender.tintColor = .red
+            sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
     }
     

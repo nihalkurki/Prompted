@@ -95,6 +95,21 @@ import Firebase
 class RedViewController: UIViewController, UITextFieldDelegate {
     let db = Firestore.firestore()
     
+//    let now = Date()
+//    let dateFormatter = DateFormatter()
+//    dateFormatter.dateFormat = "yyyy-MM-dd" // or any other format you want
+//    let dateString = dateFormatter.string(from: now)
+    
+    lazy var dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            return formatter
+        }()
+        
+        var dateString: String {
+            return dateFormatter.string(from: Date())
+        }
+    
     private let imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "PromptlyLogo")
@@ -118,6 +133,40 @@ class RedViewController: UIViewController, UITextFieldDelegate {
     let textField = UITextField()
 
     override func viewDidLoad() {
+        
+        
+        
+        // get current user's UID
+        guard let currentUserUID = Auth.auth().currentUser?.uid else {
+            // handle error here
+            return
+        }
+
+
+        // construct the query to get the posts of the current day with matching UID
+        print("user id follows")
+        print(currentUserUID + dateString)
+        let query = db.collection("Post")
+            .whereField("id", isEqualTo: currentUserUID + dateString)
+        // execute the query and check if there is any matching document
+        query.getDocuments { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                guard let documents = querySnapshot?.documents else {
+                    print("No matching documents.")
+                    return
+                }
+                if documents.count > 0 {
+                    // there is at least one matching document, so redirect the user to MyNewViewController
+                    
+                    let myNewVC = MyNewViewController()
+                    myNewVC.modalPresentationStyle = .fullScreen
+                    self.present(myNewVC, animated: true, completion: nil)
+                }
+            }
+        }
+        
         super.viewDidLoad()
         
         // Set the background color
@@ -212,11 +261,29 @@ class RedViewController: UIViewController, UITextFieldDelegate {
             return
         }
         
-        db.collection("Post").addDocument(data: [
+        
+//        db.collection("Post").addDocument(data: [
+//                "text": userResponse,
+//                "timestamp": FieldValue.serverTimestamp(),
+//                "like_count": 1,
+//                "id": uid
+//            ]) { error in
+//                if let error = error {
+//                    print("Error adding document: \(error)")
+//                } else {
+//                    print("Document added with ID: NO ID recorded")
+//                }
+//            }
+        
+        if let uid = Auth.auth().currentUser?.uid {
+            let now = Date()
+            let timestamp = Timestamp(date: now)
+            
+            db.collection("Post").addDocument(data: [
                 "text": userResponse,
-                "timestamp": FieldValue.serverTimestamp(),
+                "timestamp": timestamp,
                 "like_count": 1,
-                "id": 21
+                "id": uid + dateString
             ]) { error in
                 if let error = error {
                     print("Error adding document: \(error)")
@@ -224,6 +291,9 @@ class RedViewController: UIViewController, UITextFieldDelegate {
                     print("Document added with ID: NO ID recorded")
                 }
             }
+        } else {
+            print("Error: User is not logged in")
+        }
         
         let viewScreen = MyNewViewController()
         viewScreen.modalPresentationStyle = .fullScreen

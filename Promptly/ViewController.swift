@@ -74,7 +74,7 @@ class ViewController: UIViewController {
         //super.viewDidLoad()
         //view.backgroundColor = .systemRed
         // Do any additional setup after loading the view.
-        
+                
         
         if (FirebaseAuth.Auth.auth().currentUser != nil) {
             showLoginScreen()
