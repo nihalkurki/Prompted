@@ -112,6 +112,8 @@ class MyNewViewController: UIViewController {
         scrollView.backgroundColor = UIColor(red: 235/255, green: 220/255, blue: 255/255, alpha: 1.0)
         scrollView.isScrollEnabled = true
         view.addSubview(scrollView)
+        
+        var likeCount: Int = 0
 
         for post in posts {
             
@@ -196,19 +198,28 @@ class MyNewViewController: UIViewController {
             let likeButton = UIButton(frame: CGRect(x: whiteBox.frame.width - 70, y: 30, width: 30, height: 30))
             likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
             likeButton.tintColor = .gray
+            likeButton.tag = post.id.hashValue
+            //likeButton.tag = post.test
             whiteBox.addSubview(likeButton)
+            
+            
             
             // Add the like count label
             let likeCountLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 40, y: 30, width: 40, height: 30))
             likeCountLabel.text = "\(post.like_count)"
             likeCountLabel.font = UIFont.systemFont(ofSize: 14)
             likeCountLabel.textColor = .gray
+            likeCountLabel.tag = post.id.hashValue
             whiteBox.addSubview(likeCountLabel)
+            
+            likeCount += 1
             
             
             
             // Add target action to the like button
-            likeButton.addTarget(self, action: #selector(likeButtonTapped(sender:)), for: .touchUpInside)
+//            likeButton.addTarget(self, action: #selector(likeButtonTapped(sender:)), for: .touchUpInside)
+            likeButton.addTarget(self, action: #selector(likeButtonTapped(_:)), for: .touchUpInside)
+
 
 
             yOffset += 120
@@ -220,21 +231,61 @@ class MyNewViewController: UIViewController {
 
     }
     
-    @objc func likeButtonTapped(sender: UIButton) {
-        // Increase like count and update label
-        print("is button working")
-
-        if let index = posts.firstIndex(where: { String($0.id) == String(sender.tag) }) {
-            
-            print("is first if working")
+//    @objc func likeButtonTapped(sender: UIButton) {
+//        // Increase like count and update label
+//        print("is button working")
+//
+//        if let index = posts.firstIndex(where: { String($0.id.hashValue) == String(sender.tag) }) {
+//
+//            print("is first if working")
+//            posts[index].like_count += 1
+//            if let likeCountLabel = sender.superview?.subviews.compactMap({ $0 as? UILabel }).first {
+//
+//                print("is second if working")
+//                likeCountLabel.text = "\(posts[index].like_count)"
+//            }
+//
+//            // Fill up heart icon red
+//            sender.tintColor = .red
+//            sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+//        }
+//    }
+    
+//    @objc func likeButtonTapped(sender: UIButton) {
+//        // Increase like count and update label
+//        print("is button working")
+//
+//        if let index = posts.firstIndex(where: { String($0.id.hashValue) == String(sender.tag) }) {
+//            print("is first if working")
+//            posts[index].like_count += 1
+//            if let likeCountLabel = sender.superview?.subviews.compactMap({ $0 as? UILabel }).first {
+//                print("is second if working")
+//                likeCountLabel.text = "\(posts[index].like_count)"
+//            }
+//
+//            // Fill up heart icon red
+//            sender.tintColor = .red
+//            sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+//        }
+//    }
+    
+    @objc func likeButtonTapped(_ sender: UIButton) {
+        if let index = posts.firstIndex(where: { $0.id.hashValue == sender.tag }) {
+            // Increase like count for the post
             posts[index].like_count += 1
-            if let likeCountLabel = sender.superview?.subviews.compactMap({ $0 as? UILabel }).first {
-                
-                print("is second if working")
+            print(posts[index].like_count)
+            
+            // Find the corresponding like count label
+//            if let likeCountLabel = sender.superview?.subviews.first(where: { $0.tag == sender.tag }) as? UILabel {
+//                // Update the like count label text
+//                likeCountLabel.text = "\(posts[index].like_count)"
+//            }
+            
+            if let likeCountLabel = sender.superview?.viewWithTag(1) as? UILabel {
                 likeCountLabel.text = "\(posts[index].like_count)"
             }
             
-            // Fill up heart icon red
+            // Update the like button appearance
             sender.tintColor = .red
             sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
         }
