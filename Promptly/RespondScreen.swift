@@ -279,18 +279,54 @@ class RedViewController: UIViewController, UITextFieldDelegate {
             let now = Date()
             let timestamp = Timestamp(date: now)
             
-            db.collection("Post").addDocument(data: [
-                "text": userResponse,
-                "timestamp": timestamp,
-                "like_count": 1,
-                "id": uid + dateString
-            ]) { error in
-                if let error = error {
-                    print("Error adding document: \(error)")
-                } else {
-                    print("Document added with ID: NO ID recorded")
+            
+            let today = Calendar.current.startOfDay(for: Date())
+            let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: today)!
+            let postRef = db.collection("Post")
+
+            postRef.whereField("timestamp", isGreaterThanOrEqualTo: Timestamp(date: today))
+                .whereField("timestamp", isLessThan: Timestamp(date: tomorrow))
+                .getDocuments() { (querySnapshot, error) in
+                    if let error = error {
+                        print("Error getting documents: \(error)")
+                    } else {
+                        let likeId = querySnapshot?.documents.count ?? 0 // Use the count of documents to set the initial value of like_id
+
+                        self.db.collection("Post").addDocument(data: [
+                            "text": userResponse,
+                            "timestamp": timestamp,
+                            "like_count": 0,
+                            "id": uid + self.dateString,
+                            "like_id": likeId
+                        ]) { error in
+                            if let error = error {
+                                print("Error adding document: \(error)")
+                            } else {
+                                print("Document added with ID: NO ID recorded")
+                            }
+                        }
+                    }
                 }
-            }
+
+
+            
+//            db.collection("Post").addDocument(data: [
+//                "text": userResponse,
+//                "timestamp": timestamp,
+//                "like_count": 1,
+//                "id": uid + dateString,
+//                "like_id": 0
+//            ]) { error in
+//                if let error = error {
+//                    print("Error adding document: \(error)")
+//                } else {
+//                    print("Document added with ID: NO ID recorded")
+//                }
+//            }
+            
+            
+            
+            
         } else {
             print("Error: User is not logged in")
         }

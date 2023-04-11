@@ -14,5 +14,6 @@ struct Post: Identifiable {
     var text: String
     var timestamp: Timestamp
     var like_count: Int32
+    var like_id: Int
 }
 

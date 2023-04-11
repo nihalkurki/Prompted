@@ -10,7 +10,7 @@ import SwiftUI
 import Firebase
 import FirebaseFirestore
 import UIKit
-
+import CommonCrypto
 import Combine
 
 
@@ -44,12 +44,13 @@ class DataManager: ObservableObject {
                     let text = data["text"] as? String ?? ""
                     let likes = data["like_count"] as? Int32 ?? 0
                     let timestamp = data["timestamp"] as? Timestamp ?? defaultTimestamp
+                    let like_id = data["like_id"] as? Int ?? 0
                     
-                    let post = Post(id: id, text: text, timestamp: timestamp, like_count: likes)
+                    let post = Post(id: id, text: text, timestamp: timestamp, like_count: likes, like_id: like_id)
                     self.posts.append(post)
                 }
                 
-                self.posts.sort(by: { $0.timestamp.dateValue() > $1.timestamp.dateValue() })
+                self.posts.sort(by: { $0.timestamp.dateValue() <= $1.timestamp.dateValue() })
 
             }
         }
@@ -136,7 +137,7 @@ class MyNewViewController: UIViewController {
             
             let formattedDate = post.timestamp.dateValue()
             let output = dateFormatter2.string(from: date)
-            print(output)
+            //print(output)
             
 //            dateFormatter.dateFormat = "h:mm a"
 //
@@ -193,26 +194,35 @@ class MyNewViewController: UIViewController {
             timestampLabel.font = UIFont.systemFont(ofSize: 14)
             timestampLabel.textColor = .gray
             whiteBox.addSubview(timestampLabel)
-
+            
+            
+            
             // Add the like button
             let likeButton = UIButton(frame: CGRect(x: whiteBox.frame.width - 70, y: 30, width: 30, height: 30))
             likeButton.setImage(UIImage(systemName: "heart"), for: .normal)
             likeButton.tintColor = .gray
-            likeButton.tag = post.id.hashValue
-            //likeButton.tag = post.test
+            likeButton.tag = likeCount
             whiteBox.addSubview(likeButton)
             
-            
-            
+            print(post.id)
+            print(likeButton.tag)
+
             // Add the like count label
             let likeCountLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 40, y: 30, width: 40, height: 30))
             likeCountLabel.text = "\(post.like_count)"
             likeCountLabel.font = UIFont.systemFont(ofSize: 14)
             likeCountLabel.textColor = .gray
-            likeCountLabel.tag = post.id.hashValue
+            likeCountLabel.tag = likeCount + 1000
             whiteBox.addSubview(likeCountLabel)
             
+            if (likeButton.tag == likeCountLabel.tag) {
+                print("equality")
+                print(likeCountLabel.tag)
+            }
+            
             likeCount += 1
+            
+            
             
             
             
@@ -231,65 +241,193 @@ class MyNewViewController: UIViewController {
 
     }
     
-//    @objc func likeButtonTapped(sender: UIButton) {
-//        // Increase like count and update label
-//        print("is button working")
+////only UI
+//    @objc func likeButtonTapped(_ sender: UIButton) {
+//        if let index = posts.firstIndex(where: { $0.like_id == sender.tag }) {
+//            var post = posts[index] // Create a mutable copy of the post
 //
-//        if let index = posts.firstIndex(where: { String($0.id.hashValue) == String(sender.tag) }) {
-//
-//            print("is first if working")
-//            posts[index].like_count += 1
-//            if let likeCountLabel = sender.superview?.subviews.compactMap({ $0 as? UILabel }).first {
-//
-//                print("is second if working")
-//                likeCountLabel.text = "\(posts[index].like_count)"
+//            if sender.tintColor == .gray { // If heart is not filled, increase like count
+//                post.like_count += 1
+//                sender.tintColor = .red
+//                sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+//            } else { // If heart is filled, decrease like count
+//                post.like_count -= 1
+//                sender.tintColor = .gray
+//                sender.setImage(UIImage(systemName: "heart"), for: .normal)
 //            }
+//            print(post.like_count)
+//            print(index)
+//            print(post.like_id)
+//            posts[index] = post // Assign the modified copy back to the posts array
 //
-//            // Fill up heart icon red
-//            sender.tintColor = .red
-//            sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+//            if let likeCountLabel = sender.superview?.viewWithTag(post.like_id + 1000) as? UILabel {
+//                print(likeCountLabel.tag)
+//                likeCountLabel.text = "\(post.like_count)"
+//            }
 //        }
 //    }
     
-//    @objc func likeButtonTapped(sender: UIButton) {
-//        // Increase like count and update label
-//        print("is button working")
+    
+    
+    
+//backend too, but not fully UI
+//    @objc func likeButtonTapped(_ sender: UIButton) {
+//        if let index = posts.firstIndex(where: { $0.like_id == sender.tag }) {
+//            var post = posts[index] // Create a mutable copy of the post
 //
-//        if let index = posts.firstIndex(where: { String($0.id.hashValue) == String(sender.tag) }) {
-//            print("is first if working")
-//            posts[index].like_count += 1
-//            if let likeCountLabel = sender.superview?.subviews.compactMap({ $0 as? UILabel }).first {
-//                print("is second if working")
-//                likeCountLabel.text = "\(posts[index].like_count)"
+//            if sender.tintColor == .gray { // If heart is not filled, increase like count
+//                post.like_count += 1
+//                sender.tintColor = .red
+//                sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+//            } else { // If heart is filled, decrease like count
+//                post.like_count -= 1
+//                sender.tintColor = .gray
+//                sender.setImage(UIImage(systemName: "heart"), for: .normal)
 //            }
 //
-//            // Fill up heart icon red
-//            sender.tintColor = .red
-//            sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+//
+//            // Retrieve the post document with matching like_id from Firestore
+//            let postQuery = Firestore.firestore().collection("Post").whereField("like_id", isEqualTo: post.like_id)
+//            postQuery.getDocuments { (querySnapshot, error) in
+//                if let error = error {
+//                    print("Error retrieving post document with like_id \(post.like_id): \(error.localizedDescription)")
+//                } else {
+//                    guard let document = querySnapshot?.documents.first else {
+//                        print("No post document found with like_id \(post.like_id)")
+//                        return
+//                    }
+//
+//                    // Update the Firestore document with the updated like count for the post
+//                    document.reference.updateData(["like_count": post.like_count]) { error in
+//                        if let error = error {
+//                            print("Error updating like count for post with like_id \(post.like_id): \(error.localizedDescription)")
+//                        } else {
+//                            print("Successfully updated like count for post with like_id \(post.like_id) to \(post.like_count)")
+//                        }
+//                    }
+//                }
+//            }
+//
+//            posts[index] = post // Assign the modified copy back to the posts array
+//
+//            if let likeCountLabel = sender.superview?.viewWithTag(post.like_id + 1000) as? UILabel {
+//                likeCountLabel.text = "\(post.like_count)"
+//            }
 //        }
 //    }
+    
+    
+    
+    
+ //UI with date
     
     @objc func likeButtonTapped(_ sender: UIButton) {
-        if let index = posts.firstIndex(where: { $0.id.hashValue == sender.tag }) {
-            // Increase like count for the post
-            posts[index].like_count += 1
-            print(posts[index].like_count)
+        if var index = posts.firstIndex(where: { $0.like_id == sender.tag }) {
             
-            // Find the corresponding like count label
-//            if let likeCountLabel = sender.superview?.subviews.first(where: { $0.tag == sender.tag }) as? UILabel {
-//                // Update the like count label text
-//                likeCountLabel.text = "\(posts[index].like_count)"
+        
+
+//            let dateFormatter2 = DateFormatter()
+//            dateFormatter2.dateFormat = "yyyy-MM-dd"
+//            //let today2 = dateFormatter2.string(from: Date())
+//
+//            let startOfDay2 = Calendar.current.startOfDay(for: Date())
+//            let endOfDay2 = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay2)!
+//
+//            let postQuery2 = Firestore.firestore().collection("Post")
+//                            .whereField("timestamp", isGreaterThan: startOfDay2)
+//                            .whereField("timestamp", isLessThan: endOfDay2)
+//
+//            var total = 0
+//
+//            postQuery2.getDocuments { (querySnapshot, error) in
+//                if let error = error {
+//                    print("Error retrieving post documents created today: \(error.localizedDescription)")
+//                } else {
+//                    let count = querySnapshot?.documents.count ?? 0
+//                    print("Total number of post documents created today: \(count)")
+//                    total = count
+//                    index = count - index - 1
+//                    print("before1")
+//                    print(index)
+//                    print("after1")
+//
+//                }
+//
+//                print(total)
 //            }
-            
-            if let likeCountLabel = sender.superview?.viewWithTag(1) as? UILabel {
-                likeCountLabel.text = "\(posts[index].like_count)"
+//
+//
+//            print("before")
+//            print(index)
+//            print("after")
+
+
+            //var post = posts[3 - index - 1] // Create a mutable copy of the post
+            var post = posts[index]
+
+            if sender.tintColor == .gray { // If heart is not filled, increase like count
+                post.like_count += 1
+                sender.tintColor = .red
+                sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            } else { // If heart is filled, decrease like count
+                post.like_count -= 1
+                sender.tintColor = .gray
+                sender.setImage(UIImage(systemName: "heart"), for: .normal)
             }
-            
-            // Update the like button appearance
-            sender.tintColor = .red
-            sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let today = dateFormatter.string(from: Date())
+
+            // Retrieve the post documents with matching created today from Firestore
+            let postQuery = Firestore.firestore().collection("Post").whereField(FieldPath(["id"]), isGreaterThan: "\(today)-0000")
+                            .whereField(FieldPath(["id"]), isLessThan: "\(today)-9999")
+            postQuery.getDocuments { (querySnapshot, error) in
+                if let error = error {
+                    print("Error retrieving post documents with created today: \(error.localizedDescription)")
+                } else {
+                    guard let documents = querySnapshot?.documents else {
+                        print("No post documents found with created today")
+                        return
+                    }
+
+                    for document in documents {
+                        if document.documentID == post.id {
+                            // Update the Firestore document with the updated like count for the post
+                            document.reference.updateData(["like_count": post.like_count]) { error in
+                                if let error = error {
+                                    print("Error updating like count for post with document ID \(post.id): \(error.localizedDescription)")
+                                } else {
+                                    print("Successfully updated like count for post with document ID \(post.id) to \(post.like_count)")
+                                }
+                            }
+
+                            break // exit the loop if the correct document is found and updated
+                        }
+                    }
+                }
+            }
+
+            //posts[3 - index - 1] = post // Assign the modified copy back to the posts array
+            posts[index] = post
+
+            if let likeCountLabel = sender.superview?.viewWithTag(post.like_id + 1000) as? UILabel {
+                likeCountLabel.text = "\(post.like_count)"
+            }
         }
     }
+
+
+
+
+    
+    
+
+
+
+    
+
+    
     
     func formattedDateString(from timestamp: Timestamp) -> String {
         let postDate = timestamp.dateValue()
