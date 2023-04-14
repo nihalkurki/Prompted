@@ -1,84 +1,3 @@
-////
-////  RespondScreen.swift
-////  Promptly
-////
-////  Created by Nihal Kurki on 3/25/23.
-////
-//
-//import UIKit
-//import Firebase
-//
-//class RedViewController: UIViewController {
-//
-//    override func viewDidLoad() {
-//        super.viewDidLoad()
-//
-//        // Set the background color to red
-//        view.backgroundColor = .red
-//
-//
-//        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
-//        if let email = FirebaseAuth.Auth.auth().currentUser?.email {
-//            label.text = "Welcome " + email
-//        } else {
-//            // Handle the case where currentUser is nil or email is nil
-//            label.text = "Welcome"
-//        }
-//        //label.text = "Welcome" + FirebaseAuth.Auth.auth().currentUser?.email
-//        label.textAlignment = .center
-//        label.center = view.center
-//        view.addSubview(label)
-//
-//        // Add a label to the view
-////        let label = UILabel(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
-////        label.text = "This is the red screen"
-////        label.textAlignment = .center
-////        label.center = view.center
-////        view.addSubview(label)
-//
-//        // Add a button to the view
-//        let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
-//        button.setTitle("Dismiss", for: .normal)
-//        button.setTitleColor(.white, for: .normal)
-//        button.backgroundColor = .black
-//        button.center = CGPoint(x: view.center.x, y: view.center.y + 100)
-//        button.addTarget(self, action: #selector(dismissButtonTapped), for: .touchUpInside)
-//        view.addSubview(button)
-//
-//        // Add a button to the view
-//        let post = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
-//        post.setTitle("Post", for: .normal)
-//        post.setTitleColor(.white, for: .normal)
-//        post.backgroundColor = .black
-//        post.center = CGPoint(x: view.center.x, y: view.center.y + 200)
-//        post.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
-//        view.addSubview(post)
-//    }
-//
-//    @objc func dismissButtonTapped() {
-//        dismiss(animated: true, completion: nil)
-//    }
-//
-//    @objc func postButtonTapped() {
-////        let viewScreen = ViewResponsesScreen()
-////        viewScreen.modalPresentationStyle = .fullScreen
-////        viewScreen.modalTransitionStyle = .crossDissolve
-////        self.present(viewScreen, animated: true, completion: nil)
-//
-////        let viewScreen = PostListViewController()
-////        viewScreen.modalPresentationStyle = .fullScreen
-////        viewScreen.modalTransitionStyle = .crossDissolve
-////        self.present(viewScreen, animated: true, completion: nil)
-//
-//        let viewScreen = MyNewViewController()
-//        viewScreen.modalPresentationStyle = .fullScreen
-//        viewScreen.modalTransitionStyle = .crossDissolve
-//        self.present(viewScreen, animated: true, completion: nil)
-//
-//    }
-//}
-
-
 
 
 
@@ -112,16 +31,17 @@ class RedViewController: UIViewController, UITextFieldDelegate {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "PromptlyLogo")
+        imageView.image = UIImage(named: "PromptlyLogo2")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
     }()
     
+    
     private let prompt: UILabel = {
         let label = UILabel()
         label.text = "Who would win in a fight between a Silverback gorilla and a Grizzly bear?"
-        label.font = UIFont.systemFont(ofSize: 26, weight: .bold)
+        label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
@@ -133,6 +53,26 @@ class RedViewController: UIViewController, UITextFieldDelegate {
     let textField = UITextField()
 
     override func viewDidLoad() {
+        
+
+        
+        let promptQuery = db.collection("Prompt").whereField("day", isEqualTo: dateString)
+
+        promptQuery.addSnapshotListener { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let text = document.data()["text"] as? String ?? ""
+                    print("Prompt: \(text)")
+                    DispatchQueue.main.async {
+                        self.prompt.text = text
+                    }
+                }
+            }
+        }
+
+
         
         
         
@@ -170,7 +110,7 @@ class RedViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         // Set the background color
-        view.backgroundColor = UIColor(red: 246/255, green: 247/255, blue: 254/255, alpha: 1.0)
+        view.backgroundColor = UIColor(red: 235/255, green: 220/255, blue: 255/255, alpha: 1.0)
 
         //**********
         view.addSubview(imageView)
@@ -224,7 +164,7 @@ class RedViewController: UIViewController, UITextFieldDelegate {
         let post = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
         post.setTitle("Post", for: .normal)
         post.setTitleColor(.white, for: .normal)
-        post.backgroundColor = .black
+        post.backgroundColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
         post.center = CGPoint(x: view.center.x, y: view.center.y + 230)
         post.layer.cornerRadius = 5
         post.layer.borderWidth = 1
@@ -235,7 +175,7 @@ class RedViewController: UIViewController, UITextFieldDelegate {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
         button.setTitle("Dismiss", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
         button.center = CGPoint(x: view.center.x, y: view.center.y + 300)
         button.layer.cornerRadius = 5
         button.layer.borderWidth = 1

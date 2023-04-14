@@ -14,6 +14,10 @@ import CommonCrypto
 import Combine
 
 
+class ReplyButton: UIButton {
+    var pId: String?
+}
+
 class DataManager: ObservableObject {
     @Published var posts: [Post] = []
     
@@ -93,15 +97,17 @@ class MyNewViewController: UIViewController {
         var yOffset: CGFloat = 10
 
         // Add the logo image
-        let logoImageView = UIImageView(image: UIImage(named: "PromptlyLogo"))
+        let logoImageView = UIImageView(image: UIImage(named: "PromptlyLogo2"))
         logoImageView.contentMode = .scaleAspectFit
-        logoImageView.frame = CGRect(x: 0, y: 50, width: view.frame.width, height: 50)
+        logoImageView.frame = CGRect(x: 0, y: 50, width: view.frame.width, height: 100)
         view.addSubview(logoImageView)
 
         // Add the "Today's Prompt" label
         let todayPromptLabel = UILabel(frame: CGRect(x: 20, y: 120, width: view.frame.width - 40, height: 40))
-        todayPromptLabel.text = "Today's Prompt"
-        todayPromptLabel.font = UIFont.boldSystemFont(ofSize: 22)
+        todayPromptLabel.text = "What is a boring fact about you?"
+        todayPromptLabel.font = UIFont.boldSystemFont(ofSize: 20)
+        todayPromptLabel.textColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
+        //        todayPromptLabel.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
         todayPromptLabel.textAlignment = .center
         view.addSubview(todayPromptLabel)
         
@@ -156,7 +162,7 @@ class MyNewViewController: UIViewController {
 
             // Create the white box container
             let whiteBox = UIView(frame: CGRect(x: 20, y: yOffset, width: view.frame.width - 40, height: 100))
-            whiteBox.backgroundColor = .white
+            whiteBox.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.9)
             whiteBox.layer.cornerRadius = 10
             whiteBox.layer.shadowColor = UIColor.black.cgColor
             whiteBox.layer.shadowOpacity = 0.1
@@ -166,7 +172,8 @@ class MyNewViewController: UIViewController {
 
             // Add the profile picture
             let profilePic = UIImageView(frame: CGRect(x: 10, y: 10, width: 80, height: 80))
-            profilePic.backgroundColor = .gray
+            profilePic.image = UIImage(named: "ProfilePic")
+            profilePic.backgroundColor = .white
             profilePic.layer.cornerRadius = 40
             profilePic.clipsToBounds = true
             whiteBox.addSubview(profilePic)
@@ -176,6 +183,7 @@ class MyNewViewController: UIViewController {
             postText.text = post.text
             postText.numberOfLines = 0
             postText.font = UIFont.systemFont(ofSize: 18)
+            postText.textColor = .black
             whiteBox.addSubview(postText)
             
             
@@ -189,7 +197,7 @@ class MyNewViewController: UIViewController {
 
             // Add the timestamp
 //            let timestampLabel = UILabel(frame: CGRect(x: 240, y: 70, width: whiteBox.frame.width - 10, height: 20))
-            let timestampLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 70, y: 70, width: whiteBox.frame.width - 10, height: 20))
+            let timestampLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 70, y: 8, width: whiteBox.frame.width - 10, height: 20))
             timestampLabel.text = output
             timestampLabel.font = UIFont.systemFont(ofSize: 14)
             timestampLabel.textColor = .gray
@@ -220,6 +228,17 @@ class MyNewViewController: UIViewController {
                 print(likeCountLabel.tag)
             }
             
+            //let replyButton = UIButton(type: .system, frame: CGRect(x: whiteBox.frame.width - 60, y: 5, width: 30, height: 30))
+            let replyButton = ReplyButton(type: .system)
+            replyButton.pId = post.id
+            replyButton.frame = CGRect(x: whiteBox.frame.width - 80, y: 65, width: 70, height: 30)
+            //replyButton.setImage(UIImage(systemName: "heart"), for: .normal)
+            replyButton.setTitle("Reply!", for: .normal)
+            replyButton.tintColor = .gray
+            whiteBox.addSubview(replyButton)
+                        
+                        
+            
             likeCount += 1
             
             
@@ -229,6 +248,8 @@ class MyNewViewController: UIViewController {
             // Add target action to the like button
 //            likeButton.addTarget(self, action: #selector(likeButtonTapped(sender:)), for: .touchUpInside)
             likeButton.addTarget(self, action: #selector(likeButtonTapped(_:)), for: .touchUpInside)
+            
+            replyButton.addTarget(self, action: #selector(replyButtonTapped), for: .touchUpInside)
 
 
 
@@ -240,33 +261,6 @@ class MyNewViewController: UIViewController {
         scrollView.contentSize = CGSize(width: view.frame.width, height: yOffset + 200)
 
     }
-    
-////only UI
-//    @objc func likeButtonTapped(_ sender: UIButton) {
-//        if let index = posts.firstIndex(where: { $0.like_id == sender.tag }) {
-//            var post = posts[index] // Create a mutable copy of the post
-//
-//            if sender.tintColor == .gray { // If heart is not filled, increase like count
-//                post.like_count += 1
-//                sender.tintColor = .red
-//                sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-//            } else { // If heart is filled, decrease like count
-//                post.like_count -= 1
-//                sender.tintColor = .gray
-//                sender.setImage(UIImage(systemName: "heart"), for: .normal)
-//            }
-//            print(post.like_count)
-//            print(index)
-//            print(post.like_id)
-//            posts[index] = post // Assign the modified copy back to the posts array
-//
-//            if let likeCountLabel = sender.superview?.viewWithTag(post.like_id + 1000) as? UILabel {
-//                print(likeCountLabel.tag)
-//                likeCountLabel.text = "\(post.like_count)"
-//            }
-//        }
-//    }
-    
     
     
     
@@ -322,47 +316,8 @@ class MyNewViewController: UIViewController {
  //UI with date
     
     @objc func likeButtonTapped(_ sender: UIButton) {
-        if var index = posts.firstIndex(where: { $0.like_id == sender.tag }) {
-            
-        
+        if var index = posts.lastIndex(where: { $0.like_id == sender.tag }) {
 
-//            let dateFormatter2 = DateFormatter()
-//            dateFormatter2.dateFormat = "yyyy-MM-dd"
-//            //let today2 = dateFormatter2.string(from: Date())
-//
-//            let startOfDay2 = Calendar.current.startOfDay(for: Date())
-//            let endOfDay2 = Calendar.current.date(byAdding: .day, value: 1, to: startOfDay2)!
-//
-//            let postQuery2 = Firestore.firestore().collection("Post")
-//                            .whereField("timestamp", isGreaterThan: startOfDay2)
-//                            .whereField("timestamp", isLessThan: endOfDay2)
-//
-//            var total = 0
-//
-//            postQuery2.getDocuments { (querySnapshot, error) in
-//                if let error = error {
-//                    print("Error retrieving post documents created today: \(error.localizedDescription)")
-//                } else {
-//                    let count = querySnapshot?.documents.count ?? 0
-//                    print("Total number of post documents created today: \(count)")
-//                    total = count
-//                    index = count - index - 1
-//                    print("before1")
-//                    print(index)
-//                    print("after1")
-//
-//                }
-//
-//                print(total)
-//            }
-//
-//
-//            print("before")
-//            print(index)
-//            print("after")
-
-
-            //var post = posts[3 - index - 1] // Create a mutable copy of the post
             var post = posts[index]
 
             if sender.tintColor == .gray { // If heart is not filled, increase like count
@@ -419,14 +374,14 @@ class MyNewViewController: UIViewController {
 
 
 
-
+    @objc func replyButtonTapped(_ sender: ReplyButton){
+        let viewScreen = ViewRepliesScreen()
+        viewScreen.postId = sender.pId
+        viewScreen.modalPresentationStyle = .fullScreen
+        viewScreen.modalTransitionStyle = .crossDissolve
+        self.present(viewScreen, animated: true, completion: nil)
+    }
     
-    
-
-
-
-    
-
     
     
     func formattedDateString(from timestamp: Timestamp) -> String {

@@ -17,3 +17,11 @@ struct Post: Identifiable {
     var like_id: Int
 }
 
+
+struct Reply: Identifiable {
+    var id: String
+    var text: String
+    var timestamp: Timestamp
+    var like_count: Int32
+    var post_id: String
+}

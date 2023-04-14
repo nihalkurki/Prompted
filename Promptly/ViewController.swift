@@ -8,7 +8,7 @@ class ViewController: UIViewController {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "PromptlyLogo2")
+        imageView.image = UIImage(named: "PromptedHome")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -19,7 +19,7 @@ class ViewController: UIViewController {
         imageView.image = UIImage(named: "People")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.alpha = 0.5
+        imageView.alpha = 1
         return imageView
     }()
     
@@ -126,6 +126,7 @@ class ViewController: UIViewController {
         
         signOutButton.isHidden = true
         
+        //view.addSubview(backgroundImage2)
         view.addSubview(imageView)
         view.addSubview(backgroundImage)
         view.addSubview(prompt)
