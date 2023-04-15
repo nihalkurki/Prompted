@@ -67,6 +67,19 @@ class DataManager: ObservableObject {
 
 
 class MyNewViewController: UIViewController {
+    
+    lazy var dateFormatter: DateFormatter = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            return formatter
+        }()
+    
+    var dateString: String {
+        return dateFormatter.string(from: Date())
+    }
+    
+    let db = Firestore.firestore()
+
 
     private var dataManager = DataManager()
     private var posts: [Post] = []
@@ -99,23 +112,42 @@ class MyNewViewController: UIViewController {
         // Add the logo image
         let logoImageView = UIImageView(image: UIImage(named: "PromptlyLogo2"))
         logoImageView.contentMode = .scaleAspectFit
-        logoImageView.frame = CGRect(x: 0, y: 50, width: view.frame.width, height: 100)
+        logoImageView.frame = CGRect(x: 0, y: 50, width: view.frame.width, height: 150)
         view.addSubview(logoImageView)
+        
+        
 
         // Add the "Today's Prompt" label
-        let todayPromptLabel = UILabel(frame: CGRect(x: 20, y: 120, width: view.frame.width - 40, height: 40))
+        let todayPromptLabel = UILabel(frame: CGRect(x: 20, y: 120, width: view.frame.width - 40, height: 120))
         todayPromptLabel.text = "What is a boring fact about you?"
         todayPromptLabel.font = UIFont.boldSystemFont(ofSize: 20)
         todayPromptLabel.textColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
         //        todayPromptLabel.backgroundColor = UIColor(red: 255/255, green: 255/255, blue: 255/255, alpha: 0.5)
         todayPromptLabel.textAlignment = .center
+        todayPromptLabel.lineBreakMode = NSLineBreakMode.byWordWrapping
         view.addSubview(todayPromptLabel)
+        
+        let promptQuery = db.collection("Prompt").whereField("day", isEqualTo: dateString)
+
+        promptQuery.addSnapshotListener { (querySnapshot, error) in
+            if let error = error {
+                print("Error getting documents: \(error)")
+            } else {
+                for document in querySnapshot!.documents {
+                    let text = document.data()["text"] as? String ?? ""
+                    print("Prompt: \(text)")
+                    DispatchQueue.main.async {
+                        todayPromptLabel.text = text
+                    }
+                }
+            }
+        }
         
 
         //var yOffset: CGFloat = 250
         
 //        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 200, width: view.frame.width, height: view.frame.height - 200))
-        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 180, width: view.frame.width, height: view.frame.height))
+        let scrollView = UIScrollView(frame: CGRect(x: 0, y: 240, width: view.frame.width, height: view.frame.height))
         scrollView.backgroundColor = UIColor(red: 235/255, green: 220/255, blue: 255/255, alpha: 1.0)
         scrollView.isScrollEnabled = true
         view.addSubview(scrollView)
@@ -262,53 +294,6 @@ class MyNewViewController: UIViewController {
 
     }
     
-    
-    
-//backend too, but not fully UI
-//    @objc func likeButtonTapped(_ sender: UIButton) {
-//        if let index = posts.firstIndex(where: { $0.like_id == sender.tag }) {
-//            var post = posts[index] // Create a mutable copy of the post
-//
-//            if sender.tintColor == .gray { // If heart is not filled, increase like count
-//                post.like_count += 1
-//                sender.tintColor = .red
-//                sender.setImage(UIImage(systemName: "heart.fill"), for: .normal)
-//            } else { // If heart is filled, decrease like count
-//                post.like_count -= 1
-//                sender.tintColor = .gray
-//                sender.setImage(UIImage(systemName: "heart"), for: .normal)
-//            }
-//
-//
-//            // Retrieve the post document with matching like_id from Firestore
-//            let postQuery = Firestore.firestore().collection("Post").whereField("like_id", isEqualTo: post.like_id)
-//            postQuery.getDocuments { (querySnapshot, error) in
-//                if let error = error {
-//                    print("Error retrieving post document with like_id \(post.like_id): \(error.localizedDescription)")
-//                } else {
-//                    guard let document = querySnapshot?.documents.first else {
-//                        print("No post document found with like_id \(post.like_id)")
-//                        return
-//                    }
-//
-//                    // Update the Firestore document with the updated like count for the post
-//                    document.reference.updateData(["like_count": post.like_count]) { error in
-//                        if let error = error {
-//                            print("Error updating like count for post with like_id \(post.like_id): \(error.localizedDescription)")
-//                        } else {
-//                            print("Successfully updated like count for post with like_id \(post.like_id) to \(post.like_count)")
-//                        }
-//                    }
-//                }
-//            }
-//
-//            posts[index] = post // Assign the modified copy back to the posts array
-//
-//            if let likeCountLabel = sender.superview?.viewWithTag(post.like_id + 1000) as? UILabel {
-//                likeCountLabel.text = "\(post.like_count)"
-//            }
-//        }
-//    }
     
     
     

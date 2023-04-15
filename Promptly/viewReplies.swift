@@ -30,7 +30,7 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
     
     private let imageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = UIImage(named: "PromptlyLogo")
+        imageView.image = UIImage(named: "PromptlyLogo2")
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -62,10 +62,11 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
             return
         }
         
-        textField2.frame = CGRect(x: 120, y: 80, width: 400, height: 250)
+        textField2.frame = CGRect(x: 120, y: 60, width: 400, height: 200)
         textField2.text = "abc"
         textField2.font = UIFont.systemFont(ofSize: textField2.font.pointSize + 14)
         textField2.textColor = .black
+        
         view.addSubview(textField2)
         
         if let postId = postId {
@@ -104,12 +105,12 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         // Set the background color
-        view.backgroundColor = UIColor(red: 246/255, green: 247/255, blue: 254/255, alpha: 1.0)
+        view.backgroundColor = UIColor(red: 235/255, green: 220/255, blue: 255/255, alpha: 1.0)
 
         //**********
         view.addSubview(imageView)
         //view.addSubview(prompt)
-                
+        
         
         
         // Get a reference to the `replies` collection
@@ -150,93 +151,104 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
             // Set the `replies` variable to the array of reply data
             self.replies.sort(by: { $0.timestamp.dateValue() <= $1.timestamp.dateValue() })
             
+            
+            //print(self.replies)
+            
+            var yOffset: CGFloat = 200
+            for reply in self.replies {
+                
+                
+    //            let input = formattedDateString(from: post.timestamp)
+    //            print(input)
+    //            let dateFormatter = DateFormatter()
+    //            //dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+    //            dateFormatter.dateFormat = "MMM d, yyyy"
+                
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                
+                let date = reply.timestamp.dateValue()
+                let input = dateFormatter.string(from: date)
+                
+                let dateFormatter2 = DateFormatter()
+                
+                dateFormatter2.dateFormat = "h:mm a"
+                
+                let formattedDate = reply.timestamp.dateValue()
+                let output = dateFormatter2.string(from: date)
+                //print(output)
+                
+    //            dateFormatter.dateFormat = "h:mm a"
+    //
+    //            let formattedDate = post.timestamp.dateValue()
+    //            let output = dateFormatter.string(from: formattedDate)
+    //            print(output)
+                
+                let postDate = dateFormatter.date(from: input)
+                guard let date = postDate else { continue }
+
+
+                // Create the white box container
+                let whiteBox = UIView(frame: CGRect(x: 20, y: yOffset, width: self.view.frame.width - 40, height: 100))
+                whiteBox.backgroundColor = .white
+                whiteBox.layer.cornerRadius = 10
+                whiteBox.layer.shadowColor = UIColor.black.cgColor
+                whiteBox.layer.shadowOpacity = 0.1
+                whiteBox.layer.shadowOffset = CGSize(width: 0, height: 1)
+                whiteBox.layer.shadowRadius = 5
+                self.view.addSubview(whiteBox)
+
+                // Add the profile picture
+                let profilePic = UIImageView(frame: CGRect(x: 10, y: 10, width: 80, height: 80))
+                profilePic.image = UIImage(named: "ProfilePic")
+                profilePic.backgroundColor = .white
+                profilePic.layer.cornerRadius = 40
+                profilePic.clipsToBounds = true
+                whiteBox.addSubview(profilePic)
+
+                // Add the post text
+                let postText = UILabel(frame: CGRect(x: 100, y: 10, width: whiteBox.frame.width - 150, height: 60))
+                postText.text = reply.text
+                print(reply.text)
+                postText.numberOfLines = 0
+                postText.font = UIFont.systemFont(ofSize: 18)
+                whiteBox.addSubview(postText)
+                
+                
+                
+                // Add the user email
+                let userEmailLabel = UILabel(frame: CGRect(x: 100, y: 70, width: whiteBox.frame.width - 150, height: 20))
+                userEmailLabel.text = Auth.auth().currentUser?.email
+                userEmailLabel.font = UIFont.systemFont(ofSize: 14)
+                userEmailLabel.textColor = .gray
+                whiteBox.addSubview(userEmailLabel)
+
+                // Add the timestamp
+    //            let timestampLabel = UILabel(frame: CGRect(x: 240, y: 70, width: whiteBox.frame.width - 10, height: 20))
+                let timestampLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 70, y: 70, width: whiteBox.frame.width - 10, height: 20))
+                timestampLabel.text = output
+                timestampLabel.font = UIFont.systemFont(ofSize: 14)
+                timestampLabel.textColor = .gray
+                whiteBox.addSubview(timestampLabel)
+                
+                
+            
+
+                yOffset += 120
+                
+
+            }
+            
+            
+            
+            
+            //self.replies = replies
+            //print(self.replies)
             // Use the `replies` variable elsewhere in your code
             // ...
         }
         
-        
-        
-        var yOffset: CGFloat = 100
-        for reply in replies {
-            
-            
-//            let input = formattedDateString(from: post.timestamp)
-//            print(input)
-//            let dateFormatter = DateFormatter()
-//            //dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-//            dateFormatter.dateFormat = "MMM d, yyyy"
-            
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            
-            let date = reply.timestamp.dateValue()
-            let input = dateFormatter.string(from: date)
-            
-            let dateFormatter2 = DateFormatter()
-            
-            dateFormatter2.dateFormat = "h:mm a"
-            
-            let formattedDate = reply.timestamp.dateValue()
-            let output = dateFormatter2.string(from: date)
-            //print(output)
-            
-//            dateFormatter.dateFormat = "h:mm a"
-//
-//            let formattedDate = post.timestamp.dateValue()
-//            let output = dateFormatter.string(from: formattedDate)
-//            print(output)
-            
-            let postDate = dateFormatter.date(from: input)
-            guard let date = postDate else { continue }
 
-
-            // Create the white box container
-            let whiteBox = UIView(frame: CGRect(x: 20, y: yOffset, width: view.frame.width - 40, height: 100))
-            whiteBox.backgroundColor = .white
-            whiteBox.layer.cornerRadius = 10
-            whiteBox.layer.shadowColor = UIColor.black.cgColor
-            whiteBox.layer.shadowOpacity = 0.1
-            whiteBox.layer.shadowOffset = CGSize(width: 0, height: 1)
-            whiteBox.layer.shadowRadius = 5
-
-            // Add the profile picture
-            let profilePic = UIImageView(frame: CGRect(x: 10, y: 10, width: 80, height: 80))
-            profilePic.backgroundColor = .gray
-            profilePic.layer.cornerRadius = 40
-            profilePic.clipsToBounds = true
-            whiteBox.addSubview(profilePic)
-
-            // Add the post text
-            let postText = UILabel(frame: CGRect(x: 100, y: 10, width: whiteBox.frame.width - 150, height: 60))
-            postText.text = reply.text
-            postText.numberOfLines = 0
-            postText.font = UIFont.systemFont(ofSize: 18)
-            whiteBox.addSubview(postText)
-            
-            
-            
-            // Add the user email
-            let userEmailLabel = UILabel(frame: CGRect(x: 100, y: 70, width: whiteBox.frame.width - 150, height: 20))
-            userEmailLabel.text = Auth.auth().currentUser?.email
-            userEmailLabel.font = UIFont.systemFont(ofSize: 14)
-            userEmailLabel.textColor = .gray
-            whiteBox.addSubview(userEmailLabel)
-
-            // Add the timestamp
-//            let timestampLabel = UILabel(frame: CGRect(x: 240, y: 70, width: whiteBox.frame.width - 10, height: 20))
-            let timestampLabel = UILabel(frame: CGRect(x: whiteBox.frame.width - 70, y: 70, width: whiteBox.frame.width - 10, height: 20))
-            timestampLabel.text = output
-            timestampLabel.font = UIFont.systemFont(ofSize: 14)
-            timestampLabel.textColor = .gray
-            whiteBox.addSubview(timestampLabel)
-            
-            
-        
-
-            yOffset += 120
-            
-
-        }
         
         
         
@@ -247,7 +259,7 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
         
         
         // Set up text field
-        textField.frame = CGRect(x: 50, y:520, width: 300, height: 100)
+        textField.frame = CGRect(x: 50, y:560, width: 300, height: 100)
         textField.placeholder = "What's your reply?"
         textField.borderStyle = .roundedRect
         textField.delegate = self
@@ -257,7 +269,7 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
         
 
         
-        
+        //textField2.translatesAutoresizingMaskIntoConstraints = false
         // Add constraints to the button
         NSLayoutConstraint.activate([
             
@@ -275,6 +287,9 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
             textField.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             textField.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             textField.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            
+            textField2.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            //textField2.centerYAnchor.constraint(equalTo: view.centerYAnchor)
         ])
         //**********
         
@@ -297,7 +312,7 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
         let post = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
         post.setTitle("Reply", for: .normal)
         post.setTitleColor(.white, for: .normal)
-        post.backgroundColor = .black
+        post.backgroundColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
         post.center = CGPoint(x: view.center.x, y: view.center.y + 280)
         post.layer.cornerRadius = 5
         post.layer.borderWidth = 1
@@ -308,7 +323,7 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
         let button = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 50))
         button.setTitle("Dismiss", for: .normal)
         button.setTitleColor(.white, for: .normal)
-        button.backgroundColor = .black
+        button.backgroundColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
         button.center = CGPoint(x: view.center.x, y: view.center.y + 350)
         button.layer.cornerRadius = 5
         button.layer.borderWidth = 1
