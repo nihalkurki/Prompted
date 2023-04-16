@@ -114,7 +114,7 @@ class ViewController: UIViewController {
         respondButton.layer.cornerRadius = 5
         view.addSubview(respondButton)
         
-        respondButton.isHidden = false
+        respondButton.isHidden = true
         
         let signOutButton = UIButton()
         signOutButton.setTitle("Sign Out", for: .normal)

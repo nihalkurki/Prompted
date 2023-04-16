@@ -211,7 +211,7 @@ class MyNewViewController: UIViewController {
             whiteBox.addSubview(profilePic)
 
             // Add the post text
-            let postText = UILabel(frame: CGRect(x: 100, y: 10, width: whiteBox.frame.width - 150, height: 60))
+            let postText = UILabel(frame: CGRect(x: 100, y: 10, width: whiteBox.frame.width - 180, height: 60))
             postText.text = post.text
             postText.numberOfLines = 0
             postText.font = UIFont.systemFont(ofSize: 18)

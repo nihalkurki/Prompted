@@ -62,10 +62,25 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
             return
         }
         
-        textField2.frame = CGRect(x: 120, y: 60, width: 400, height: 200)
+        textField2.frame = CGRect(x: 0, y: 60, width: 400, height: 200)
         textField2.text = "abc"
-        textField2.font = UIFont.systemFont(ofSize: textField2.font.pointSize + 14)
-        textField2.textColor = .black
+        textField2.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+        textField2.textColor = UIColor(red: 110/255, green: 40/255, blue: 184/255, alpha: 1.0)
+        textField2.textAlignment = .center
+        textField2.numberOfLines = 0
+        textField2.lineBreakMode = NSLineBreakMode.byWordWrapping
+        
+//        private let prompt: UILabel = {
+//            let label = UILabel()
+//            label.text = "What is a boring fact about you?"
+//            label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
+//            label.textAlignment = .center
+//            label.translatesAutoresizingMaskIntoConstraints = false
+//            label.numberOfLines = 0
+//            label.lineBreakMode = NSLineBreakMode.byWordWrapping
+//
+//            return label
+//        }()
         
         view.addSubview(textField2)
         
@@ -126,6 +141,8 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
                 return
             }
             
+            
+            
             // Create an array to hold the reply data
             //var replies: [Any] = []
             
@@ -153,6 +170,11 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
             
             
             //print(self.replies)
+            
+            let scrollView = UIScrollView(frame: CGRect(x: 0, y: 200, width: self.view.frame.width, height: self.view.frame.height - 500))
+            scrollView.backgroundColor = UIColor(red: 235/255, green: 220/255, blue: 255/255, alpha: 1.0)
+            scrollView.isScrollEnabled = true
+            self.view.addSubview(scrollView)
             
             var yOffset: CGFloat = 200
             for reply in self.replies {
@@ -196,7 +218,8 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
                 whiteBox.layer.shadowOpacity = 0.1
                 whiteBox.layer.shadowOffset = CGSize(width: 0, height: 1)
                 whiteBox.layer.shadowRadius = 5
-                self.view.addSubview(whiteBox)
+                //self.view.addSubview(whiteBox)
+                scrollView.addSubview(whiteBox)
 
                 // Add the profile picture
                 let profilePic = UIImageView(frame: CGRect(x: 10, y: 10, width: 80, height: 80))
@@ -239,7 +262,7 @@ class ViewRepliesScreen: UIViewController, UITextFieldDelegate {
 
             }
             
-            
+            scrollView.contentSize = CGSize(width: self.view.frame.width, height: yOffset + 100)
             
             
             //self.replies = replies

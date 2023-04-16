@@ -40,7 +40,7 @@ class RedViewController: UIViewController, UITextFieldDelegate {
     
     private let prompt: UILabel = {
         let label = UILabel()
-        label.text = "Who would win in a fight between a Silverback gorilla and a Grizzly bear?"
+        label.text = "What is a boring fact about you?"
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +87,7 @@ class RedViewController: UIViewController, UITextFieldDelegate {
         print("user id follows")
         print(currentUserUID + dateString)
         let query = db.collection("Post")
-            .whereField("id", isEqualTo: currentUserUID + dateString)
+            .whereField("id", isEqualTo: currentUserUID + dateString + "s") //change here to go to this screen
         // execute the query and check if there is any matching document
         query.getDocuments { (querySnapshot, error) in
             if let error = error {
